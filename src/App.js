@@ -16,10 +16,22 @@ class App extends Component {
 
   checkClicked = id => {
     let currentClicked = this.state.clicked;
-    if (currentClicked.includes(id) !== true && currentClicked.length < currentClicked.length < 11) {
-      let shuffled = this.shuffle(this.state.activeCards);
-      currentClicked.push(id)
-      this.setState({clicked : currentClicked})
+    let shuffled = this.shuffle(this.state.activeCards)
+    if (currentClicked.includes(id) !== true && currentClicked.length < 11) {
+            currentClicked.push(id)
+            console.log(currentClicked);
+            console.log(this.state.clicked);
+            console.log(this.state.score);
+            let newScore = this.state.score + 1;
+      this.setState({clicked : currentClicked, score : newScore, activeCards : shuffled});
+
+    } else if (currentClicked.includes(id) !== true && currentClicked.length === 11) {
+      this.setState({score : 0, activeCards : shuffled, clicked : [], game : 'win' });
+      console.log(currentClicked);
+      console.log(this.state.clicked);
+      console.log(this.state.score);
+    } else if (currentClicked.includes(id) === true) {
+      this.setState({score: 0, activeCards: shuffled, clicked: [], game: 'lose'});
     }
   } 
 
@@ -34,7 +46,9 @@ class App extends Component {
     }
     return array;
   }
-
+restart = () => {
+  this.setState({game : 'play'})
+}
   // Map over this.state.friends and render a FriendCard component for each friend object
   render() {
     let content;
@@ -43,7 +57,7 @@ class App extends Component {
         content = 
         this.state.activeCards.map(friend => (
             <FriendCard
-              removeFriend={this.removeFriend}
+              checkClicked={this.checkClicked}
               id={friend.id}
               key={friend.id}
               name={friend.name}
@@ -52,10 +66,27 @@ class App extends Component {
               location={friend.location}
             />
           ));
+          break;
+          case 'win': 
+          content = 
+          <div>
+          <p>YOU WIN!</p>
+          <button onClick={this.restart}>Restart Game</button>
+          </div>
+          break;
+          case 'lose': 
+          content = 
+          <div>
+          <p>YOU LOSE!</p>
+          <button onClick={this.restart}>Restart Game</button>
+          </div>
+          break;
+          default: 
+          console.log('error');
     }
     return (
       <Wrapper>
-        <Title>Friends List</Title>
+        <Title>Clicky Game</Title>
         {content}
       </Wrapper>
     );

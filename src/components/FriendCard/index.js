@@ -3,14 +3,16 @@ import "./style.css";
 
 function FriendCard(props) {
   return (
+    <span onClick={() => props.checkClicked(props.id)} className="remove">
     <div className="card">
       <div className="img-container">
         <img alt={props.name} src={props.image} />
       </div>
-      <span onClick={() => props.removeFriend(props.id)} className="remove">
-        𝘅
-      </span>
+      
+      
+      
     </div>
+    </span>
   );
 }
 
